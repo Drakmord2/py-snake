@@ -1,17 +1,14 @@
-
 import pygame
-from src import Snake
-from src import Food
+from Config import Config
 
-size = width, height = 500, 500  # 320, 240
-xspeed = 2
-yspeed = 2
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
+config = Config()
+BLACK, WHITE = config.get_colors()
+xspeed, yspeed = config.get_speeds()
+size, width, height = config.get_sizes()
 
 surf = pygame.Surface((10, 10))
-surf.fill(BLACK)
 snake = pygame.Rect((0, 0), (10, 10))
+surf.fill(BLACK)
 
 
 class App:
@@ -26,6 +23,7 @@ class App:
         self._display_surf.fill(WHITE)
         pygame.display.set_caption('Snake')
         self._running = True
+        print('- Game started')
 
     def on_event(self, event):
         global yspeed
@@ -70,6 +68,7 @@ class App:
         pygame.display.flip()
 
     def on_cleanup(self):
+        print('- Game quitted')
         pygame.quit()
 
     def on_execute(self):
