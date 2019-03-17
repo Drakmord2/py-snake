@@ -1,79 +1,63 @@
+
 import pygame
-from Config import Config
 
-config = Config()
-BLACK, WHITE = config.get_colors()
-xspeed, yspeed = config.get_speeds()
-size, width, height = config.get_sizes()
+import app.Config as config
+from app.src.model.Snake import Snake
+from app.src.model.Food import Food
+from app.src.view.rendering import render, init
+from app.src.events.keyboard import keyboard_event
+from app.src.controller.gameController import game, getScore
 
-surf = pygame.Surface((10, 10))
-snake = pygame.Rect((0, 0), (10, 10))
-surf.fill(BLACK)
+BLACK = config.colors['BLACK']
+WHITE = config.colors['WHITE']
 
+canvasSize = config.canvas['size']
+canvasWidth, canvasHeight = config.canvas['width'], config.canvas['height']
+
+speed = config.game['snake_speed']
+xspeed, yspeed = speed, 0
+
+snake = Snake()
+snakeRect, surfs = snake.draw()
+
+food = Food()
+foodRect, surff = food.draw()
 
 class App:
     def __init__(self):
         self._running = True
         self._display_surf = None
-        self.size = self.weight, self.height = size
 
     def on_init(self):
-        pygame.init()
-        self._display_surf = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
-        self._display_surf.fill(WHITE)
-        pygame.display.set_caption('Snake')
-        self._running = True
-        print('- Game started')
+        self._display_surf, self._running = init()
 
     def on_event(self, event):
         global yspeed
         global xspeed
-        evento = event.type
 
-        if evento == pygame.QUIT:
-            self._running = False
-
-        if evento == pygame.MOUSEBUTTONDOWN or evento == pygame.MOUSEBUTTONUP:
-            x, y = pygame.mouse.get_pos()
-
-            if x <= width/2:
-                if y >= height/2:
-                    xspeed = -abs(xspeed)
-                    yspeed = abs(yspeed)
-                else:
-                    xspeed = -abs(xspeed)
-                    yspeed = -abs(yspeed)
-            else:
-                if y >= height/2:
-                    xspeed = abs(xspeed)
-                    yspeed = abs(yspeed)
-                else:
-                    xspeed = abs(xspeed)
-                    yspeed = -abs(yspeed)
+        self._running, xspeed, yspeed = keyboard_event(event, self._running, xspeed, yspeed)
 
     def on_loop(self):
         global xspeed
         global yspeed
-        global snake
+        global snakeRect
+        global foodRect
 
-        snake = snake.move(xspeed, yspeed)
-        if snake.left < 0 or snake.right > width:
-            xspeed = -xspeed
-        if snake.top < 0 or snake.bottom > height:
-            yspeed = -yspeed
+        snakeRect, xspeed, yspeed, foodRect = game(snakeRect, foodRect, food, xspeed, yspeed)
 
     def on_render(self):
-        self._display_surf.fill(WHITE)
-        self._display_surf.blit(surf, snake)
-        pygame.display.flip()
+        objects = [(snakeRect, surfs), (foodRect, surff)]
+
+        render(self._display_surf, objects)
 
     def on_cleanup(self):
+        score = getScore()
         print('- Game quitted')
+        print('\nFinal Score: {}\n'.format(score))
         pygame.quit()
 
     def on_execute(self):
         try:
-
             if self.on_init() is False:
                 self._running = False
 
@@ -82,13 +66,11 @@ class App:
                     self.on_event(event)
                 self.on_loop()
                 self.on_render()
-
         except KeyboardInterrupt:
             print("\n")
         finally:
             self.on_cleanup()
-            
 
 if __name__ == "__main__":
-    theApp = App()
-    theApp.on_execute()
+    app = App()
+    app.on_execute()

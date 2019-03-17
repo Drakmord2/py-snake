@@ -1,28 +1,18 @@
 
-size = width, height = 320, 240
-xspeed = 2
-yspeed = 2
+import pygame
 
+import app.Config as config
 
 class Snake(object):
-    def __init__(self, posx, posy):
-        self.posx = posx
-        self.posy = posy
-        self.xspeed = xspeed
-        self.yspeed = yspeed
+    def __init__(self):
+        self.parts = [(0,0), (11,0)]
 
-    def update(self):
-        self.xspeed = xspeed
-        self.yspeed = yspeed
-        self.posx += xspeed
-        self.posy += yspeed
+    def draw(self):
 
-        if self.posx > width:
-            self.posx = 1
-        elif self.posx < 1:
-            self.posx = width
+        snakeSize = (10, 10)
 
-        if self.posy > height:
-            self.posy = 1
-        elif self.posy < 1:
-            self.posy = height
+        surf = pygame.Surface(snakeSize)
+        snake = pygame.Rect((250, 250), snakeSize)
+        surf.fill(config.colors['BLACK'])
+
+        return snake, surf
