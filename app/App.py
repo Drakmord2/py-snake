@@ -18,7 +18,6 @@ speed = config.game['snake_speed']
 xspeed, yspeed = speed, 0
 
 snake = Snake()
-snakeRect, surfs = snake.draw()
 
 food = Food()
 foodRect, surff = food.draw()
@@ -40,13 +39,15 @@ class App:
     def on_loop(self):
         global xspeed
         global yspeed
-        global snakeRect
+        global snake
         global foodRect
 
-        snakeRect, xspeed, yspeed, foodRect = game(snakeRect, foodRect, food, xspeed, yspeed)
+        self._running, snake, xspeed, yspeed, foodRect = game(self._running, snake, foodRect, food, xspeed, yspeed)
 
     def on_render(self):
-        objects = [(snakeRect, surfs), (foodRect, surff)]
+
+        objects = snake.draw()
+        objects.append([foodRect, surff])
 
         render(self._display_surf, objects)
 
