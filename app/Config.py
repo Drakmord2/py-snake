@@ -1,8 +1,8 @@
 
 canvas = {
-    'size': (500, 500),
-    'width': 500,
-    'height': 500
+    'size': (320, 280),
+    'width': 320,
+    'height': 280
 }
 
 colors = {
@@ -12,5 +12,5 @@ colors = {
 }
 
 game = {
-    'snake_speed': 4
+    'snake_speed': 2
 }

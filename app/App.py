@@ -1,5 +1,6 @@
 
 import pygame
+import time
 
 import app.Config as config
 from app.src.model.Snake import Snake
@@ -8,19 +9,13 @@ from app.src.view.rendering import render, init
 from app.src.events.keyboard import keyboard_event
 from app.src.controller.gameController import game, getScore
 
-BLACK = config.colors['BLACK']
-WHITE = config.colors['WHITE']
-
-canvasSize = config.canvas['size']
-canvasWidth, canvasHeight = config.canvas['width'], config.canvas['height']
-
 speed = config.game['snake_speed']
 xspeed, yspeed = speed, 0
 
 snake = Snake()
 
 food = Food()
-foodRect, surff = food.draw()
+food_rect, surff = food.draw()
 
 class App:
     def __init__(self):
@@ -40,14 +35,14 @@ class App:
         global xspeed
         global yspeed
         global snake
-        global foodRect
+        global food_rect
 
-        self._running, snake, xspeed, yspeed, foodRect = game(self._running, snake, foodRect, food, xspeed, yspeed)
+        self._running, snake, xspeed, yspeed, food_rect = game(self._running, snake, food_rect, food, xspeed, yspeed)
 
     def on_render(self):
 
         objects = snake.draw()
-        objects.append([foodRect, surff])
+        objects.append([food_rect, surff])
 
         render(self._display_surf, objects)
 
@@ -62,11 +57,17 @@ class App:
             if self.on_init() is False:
                 self._running = False
 
+            on_start = 0
             while self._running:
                 for event in pygame.event.get():
                     self.on_event(event)
                 self.on_loop()
                 self.on_render()
+
+                if on_start == 0:
+                    on_start += 1
+                    time.sleep(1)
+
         except KeyboardInterrupt:
             print("\n")
         finally:

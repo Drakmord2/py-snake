@@ -5,18 +5,7 @@ import app.Config as config
 
 class Snake(object):
     def __init__(self):
-        p1 = Part([261, 250])
-        p2 = Part([250, 250], next=p1)
-        p3 = Part([239, 250], next=p2)
-        p4 = Part([228, 250], next=p3)
-        p5 = Part([217, 250], next=p4)
-
-        p1.prev = p2
-        p2.prev = p3
-        p3.prev = p4
-        p4.prev = p5
-
-        self.parts = [p1, p2, p3, p4, p5]
+        self.parts = [ Part([160, 140]) ]
 
     def draw(self):
         snake = []
@@ -30,7 +19,9 @@ class Snake(object):
 
         return snake
 
-    def add_part(self, part):
+    def add_part(self, pos):
+        part = Part(pos)
+
         self.parts[len(self.parts)-1].prev = part
         part.next = self.parts[len(self.parts)-1]
 
