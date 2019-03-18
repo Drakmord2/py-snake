@@ -2,7 +2,7 @@
 import app.Config as config
 
 score = 0
-canvasWidth, canvasHeight = config.canvas['width'], config.canvas['height']
+canvasWidth, canvasHeight, headerHeight = config.canvas['width'], config.canvas['height'], config.canvas['header_height']
 
 def game(running, snake, food_rect, food, xspeed, yspeed):
     global score
@@ -13,7 +13,7 @@ def game(running, snake, food_rect, food, xspeed, yspeed):
     snake_rect.pos[1] += yspeed
     snake_rect,_ = snake_rect.build()
 
-    if snake_rect.left < 0 or snake_rect.right > canvasWidth or snake_rect.top < 0 or snake_rect.bottom > canvasHeight:
+    if snake_rect.left < 0 or snake_rect.right > canvasWidth or snake_rect.top < headerHeight or snake_rect.bottom > canvasHeight+headerHeight:
         running = False
 
     if snake_rect.colliderect(food_rect):

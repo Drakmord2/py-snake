@@ -1,8 +1,9 @@
 
 canvas = {
-    'size': (320, 280),
+    'size': (320, 320),
     'width': 320,
-    'height': 280
+    'height': 280,
+    'header_height': 40
 }
 
 colors = {

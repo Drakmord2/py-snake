@@ -3,19 +3,19 @@ import pygame
 import random
 import app.Config as config
 
-width, height = config.canvas['width'], config.canvas['height']
+width, height, header_height = config.canvas['width'], config.canvas['height'], config.canvas['header_height']
 
 class Food(object):
     def __init__(self):
         self.fx = random.randint(20, width-20)
-        self.fy = random.randint(20, height-20)
+        self.fy = random.randint(header_height+20, height-20)
 
     def get_pos(self):
         return self.fx, self.fy
 
     def get_rand_pos(self):
         self.fx = random.randint(20, width-20)
-        self.fy = random.randint(20, height-20)
+        self.fy = random.randint(header_height+20, height-20)
 
         return self.fx, self.fy
 

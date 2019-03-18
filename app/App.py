@@ -5,7 +5,7 @@ import time
 import app.Config as config
 from app.src.model.Snake import Snake
 from app.src.model.Food import Food
-from app.src.view.rendering import render, init
+from app.src.view.rendering import render, init, result
 from app.src.events.keyboard import keyboard_event
 from app.src.controller.gameController import game, getScore
 
@@ -43,14 +43,23 @@ class App:
 
         objects = snake.draw()
         objects.append([food_rect, surff])
+        score = getScore()
 
-        render(self._display_surf, objects)
+        render(self._display_surf, objects, score)
 
     def on_cleanup(self):
         score = getScore()
         print('- Game quitted')
         print('\nFinal Score: {}\n'.format(score))
-        pygame.quit()
+
+        result(self._display_surf, score)
+
+        done = False
+        while not done:
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    done = True
+                    pygame.quit()
 
     def on_execute(self):
         try:
